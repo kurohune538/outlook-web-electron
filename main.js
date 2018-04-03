@@ -1,29 +1,33 @@
 const electron = require('electron')
 // Module to control application life.
-const app = electron.app
+const {app, Menu} = require('electron');
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 
 const path = require('path')
 const url = require('url')
-
+const ipcMain = require("electron").ipcMain;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
+// BrowserWindow.webContents.send( 'testMessage', 'test' );
+// ipcMain.on("requestMessage", (event, message) => {
+//   console.log(message);
+//   event.sender.send("responseMessage", "pong");
+// });
+
 function createWindow () {
+  installMenu()
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    resizable: true
+  })
 
   // and load the index.html of the app.
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
-    slashes: true
-  }))
-
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.loadURL("https://outlook.office.com/owa/");
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -56,5 +60,49 @@ app.on('activate', function () {
   }
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+const menuTemplate = [
+  {
+    label: 'OutlookWeb',
+    submenu: [
+      {role: 'quit'},
+    ]
+  },
+  {
+    label: 'Edit',
+    submenu: [
+      {role: 'undo'},
+      {role: 'redo'},
+      {type: 'separator'},
+      {role: 'cut'},
+      {role: 'copy'},
+      {role: 'paste'},
+      {role: 'pasteandmatchstyle'},
+      {role: 'delete'},
+      {role: 'selectall'}
+    ]
+  },
+  {
+    label: 'View',
+    submenu: [
+      {role: 'reload'},
+      {role: 'forcereload'},
+      {type: 'separator'},
+      {role: 'togglefullscreen'}
+    ]
+  },
+  {
+    role: 'window',
+    submenu: [
+      {role: 'minimize'},
+      {role: 'close'}
+    ]
+}];
+
+function installMenu() {
+  const menu = Menu.buildFromTemplate(menuTemplate);
+  if(process.platform == 'darwin') {
+    Menu.setApplicationMenu(menu);
+  } else {
+    mainWindow.setMenu(menu);
+  }
+}
