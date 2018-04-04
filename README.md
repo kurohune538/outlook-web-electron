@@ -7,6 +7,8 @@ you can run the latest App from `OutlookWeb-darwin-x64` > `OutlookWeb.app`.
 
 ### Build from source
 #### Mac
+you need `npm` & `yarn` & `electron-packager`
+
 
 ```bash
 $ npm i -g yarn
@@ -14,7 +16,6 @@ $ yarn
 $ electron-packager . OutlookWeb --platform=darwin --version=1.8.4 --overwrite --icon=./images/icon.icns
 ```
 
-you need `electron-packager`
 
 ## Todo
 - Multiple Tab Available
