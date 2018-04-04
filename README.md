@@ -9,6 +9,8 @@ you can run the latest App from `OutlookWeb-darwin-x64` > `OutlookWeb.app`.
 #### Mac
 
 ```bash
+$ npm i -g yarn
+$ yarn
 $ electron-packager . OutlookWeb --platform=darwin --version=1.8.4 --overwrite --icon=./images/icon.icns
 ```
 
