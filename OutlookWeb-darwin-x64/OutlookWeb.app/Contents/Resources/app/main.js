@@ -64,7 +64,10 @@ const menuTemplate = [
   {
     label: 'OutlookWeb',
     submenu: [
-      {role: 'quit'},
+      {
+        role: 'quit',
+        label: "Quit OutlookWeb"
+      },
     ]
   },
   {
@@ -78,7 +81,8 @@ const menuTemplate = [
       {role: 'paste'},
       {role: 'pasteandmatchstyle'},
       {role: 'delete'},
-      {role: 'selectall'}
+      {role: 'selectall'},
+      {role: 'quit'}
     ]
   },
   {
@@ -87,7 +91,10 @@ const menuTemplate = [
       {role: 'reload'},
       {role: 'forcereload'},
       {type: 'separator'},
-      {role: 'togglefullscreen'}
+      {role: 'togglefullscreen'},
+      {role: 'hide'},
+      {role: 'hideothers'},
+      {role: 'unhide'},
     ]
   },
   {
