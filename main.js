@@ -7,17 +7,10 @@ const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
 const ipcMain = require("electron").ipcMain;
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
+
 let mainWindow
 
-// BrowserWindow.webContents.send( 'testMessage', 'test' );
-// ipcMain.on("requestMessage", (event, message) => {
-//   console.log(message);
-//   event.sender.send("responseMessage", "pong");
-// });
-
-function createWindow () {
+const createWindow = () => {
   installMenu()
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -26,35 +19,40 @@ function createWindow () {
     resizable: true
   })
 
-  // and load the index.html of the app.
+  // and load the Outlook of the app.
   mainWindow.loadURL("https://outlook.office.com/owa/");
 
   // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
+  mainWindow.on('closed', () => {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null
   })
+
+  mainWindow.webContents.on('new-window', handleRedirect);
+
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.on('ready', createWindow)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
     app.quit()
   }
 })
 
+// Open link by your default browser
+const handleRedirect = (e, url) => {
+  if(mainWindow.webContents.getURL() !== "https://outlook.office.com/owa/?path=/calendar/view/WorkWeek") {
+    e.preventDefault()
+    require('electron').shell.openExternal(url)
+  }
+}
+
+
 app.on('activate', function () {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
     createWindow()
   }
@@ -105,7 +103,7 @@ const menuTemplate = [
     ]
 }];
 
-function installMenu() {
+const installMenu = () => {
   const menu = Menu.buildFromTemplate(menuTemplate);
   if(process.platform == 'darwin') {
     Menu.setApplicationMenu(menu);
